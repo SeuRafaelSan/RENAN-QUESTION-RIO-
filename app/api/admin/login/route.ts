@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {env} from "cloudflare:workers";import {adminToken} from "@/lib/admin-auth";
+export async function POST(request:Request){const {username,password}=await request.json();if(username!==(env.ADMIN_USERNAME||"admin")||password!==env.ADMIN_PASSWORD)return NextResponse.json({error:"Usuário ou senha inválidos"},{status:401});return NextResponse.json({token:await adminToken()})}

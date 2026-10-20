@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {desc} from "drizzle-orm";import {getDb} from "@/db";import {responses} from "@/db/schema";import {isAdmin} from "@/lib/admin-auth";
+export async function GET(request:Request){if(!await isAdmin(request))return NextResponse.json({error:"Não autorizado"},{status:401});const rows=await getDb().select().from(responses).orderBy(desc(responses.createdAt));return NextResponse.json({items:rows.map(r=>({...r,scores:JSON.parse(r.scores),answers:JSON.parse(r.answers)}))})}
